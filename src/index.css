@@ -2,41 +2,61 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Axel Tech AI Recruitment Platform Design System */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Dark theme base colors */
+    --background: 220 27% 8%;
+    --foreground: 210 40% 98%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    /* Card colors */
+    --card: 220 25% 12%;
+    --card-foreground: 210 40% 98%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    /* Popover colors */
+    --popover: 220 25% 12%;
+    --popover-foreground: 210 40% 98%;
 
-    --primary: 222.2 47.4% 11.2%;
+    /* Primary purple brand colors */
+    --primary: 262 83% 58%;
     --primary-foreground: 210 40% 98%;
+    --primary-glow: 262 83% 68%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Secondary colors */
+    --secondary: 220 25% 15%;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Muted colors */
+    --muted: 220 25% 15%;
+    --muted-foreground: 215 20% 65%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Accent colors */
+    --accent: 220 25% 15%;
+    --accent-foreground: 210 40% 98%;
 
-    --destructive: 0 84.2% 60.2%;
+    /* Destructive colors */
+    --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Border and input colors */
+    --border: 220 25% 18%;
+    --input: 220 25% 18%;
+    --ring: 262 83% 58%;
 
-    --radius: 0.5rem;
+    /* Custom gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(262 83% 58%), hsl(234 89% 74%));
+    --gradient-hero: linear-gradient(135deg, hsl(262 83% 58%) 0%, hsl(234 89% 74%) 50%, hsl(210 40% 98%) 100%);
+    --gradient-card: linear-gradient(135deg, hsl(220 25% 12%) 0%, hsl(220 25% 15%) 100%);
+
+    /* Shadows */
+    --shadow-glow: 0 0 40px hsl(262 83% 58% / 0.3);
+    --shadow-card: 0 8px 32px hsl(220 27% 8% / 0.4);
+    
+    /* Animation */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -101,5 +121,18 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .gradient-text {
+    background: var(--gradient-hero);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .glow-effect {
+    filter: drop-shadow(var(--shadow-glow));
   }
 }
