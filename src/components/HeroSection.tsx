@@ -23,6 +23,7 @@ const useCases = {
     robot: {
       name: "Alex HR Bot",
       age: "AI Assistant",
+      expertise: "Talent Acquisition & Screening",
       skills: ["Candidate Screening", "Interview Scheduling", "Resume Analysis"]
     },
     human: {
@@ -38,6 +39,7 @@ const useCases = {
     robot: {
       name: "InsureBot Pro",
       age: "AI Agent",
+      expertise: "Insurance Sales & Advisory",
       skills: ["Product Knowledge", "Risk Assessment", "Policy Matching"]
     },
     human: {
@@ -53,6 +55,7 @@ const useCases = {
     robot: {
       name: "ClaimBot Assistant",
       age: "AI Support",
+      expertise: "Claims Processing & Resolution",
       skills: ["Document Processing", "Claim Validation", "Quick Resolution"]
     },
     human: {
@@ -68,6 +71,7 @@ const useCases = {
     robot: {
       name: "BankBot Helper",
       age: "AI Support",
+      expertise: "Banking & Customer Service",
       skills: ["Account Management", "Transaction Support", "Security Protocols"]
     },
     human: {
@@ -110,14 +114,24 @@ export const HeroSection = () => {
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="space-y-2 text-sm">
-                <h4 className="font-semibold text-foreground">{currentUseCase.robot.name}</h4>
+              <div className="space-y-3 text-sm">
+                <h4 className="font-semibold text-foreground text-base">{currentUseCase.robot.name}</h4>
                 <p className="text-muted-foreground">{currentUseCase.robot.age}</p>
-                <div className="space-y-1">
-                  <p className="font-medium text-foreground">Primary Skills:</p>
-                  {currentUseCase.robot.skills.map((skill, index) => (
-                    <p key={index} className="text-xs text-muted-foreground">• {skill}</p>
-                  ))}
+                <div className="space-y-2">
+                  <p className="font-medium text-primary text-sm">Expertise:</p>
+                  <div className="bg-primary/10 rounded-lg px-3 py-2 border border-primary/20">
+                    <p className="text-xs font-medium text-primary">{currentUseCase.robot.expertise}</p>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <p className="font-medium text-foreground text-sm">Primary Skills:</p>
+                  <div className="space-y-1">
+                    {currentUseCase.robot.skills.map((skill, index) => (
+                      <div key={index} className="bg-gradient-primary/10 rounded-md px-2 py-1 border border-primary/10">
+                        <p className="text-xs font-medium text-foreground">✨ {skill}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -200,14 +214,18 @@ export const HeroSection = () => {
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="space-y-2 text-sm">
-                <h4 className="font-semibold text-foreground">{currentUseCase.human.name}</h4>
+              <div className="space-y-3 text-sm">
+                <h4 className="font-semibold text-foreground text-base">{currentUseCase.human.name}</h4>
                 <p className="text-muted-foreground">Age: {currentUseCase.human.age}</p>
-                <div className="space-y-1">
-                  <p className="font-medium text-foreground">Primary Skills:</p>
-                  {currentUseCase.human.skills.map((skill, index) => (
-                    <p key={index} className="text-xs text-muted-foreground">• {skill}</p>
-                  ))}
+                <div className="space-y-2">
+                  <p className="font-medium text-foreground text-sm">Primary Skills:</p>
+                  <div className="space-y-1">
+                    {currentUseCase.human.skills.map((skill, index) => (
+                      <div key={index} className="bg-gradient-secondary/10 rounded-md px-2 py-1 border border-secondary/20">
+                        <p className="text-xs font-medium text-foreground">🎯 {skill}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
