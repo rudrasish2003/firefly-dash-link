@@ -2,10 +2,16 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
 import axios from "axios";
+import VoiceChatbot from "@/components/VoiceChatbot";
 
 // Avatars
 import hrAiAvatar from "@/assets/hr-ai-avatar.png";
@@ -16,6 +22,8 @@ import claimsAiAvatar from "@/assets/claims-ai-avatar.png";
 import claimsHumanAvatar from "@/assets/claims-human-avatar.png";
 import bankAiAvatar from "@/assets/bank-ai-avatar.png";
 import bankHumanAvatar from "@/assets/bank-human-avatar.png";
+import realEstateAiAvatar from "@/assets/real-estate-ai-avatar.png";
+import realEstateHumanAvatar from "@/assets/real-estate-human-avatar.png";
 
 // ================== Use Cases ==================
 const useCases = {
@@ -83,13 +91,29 @@ const useCases = {
       skills: ["Customer Service", "Banking Knowledge", "Problem Resolution"],
     },
   },
+  "real-estate": {
+    name: "Real Estate Agent",
+    aiAvatar: realEstateAiAvatar,
+    humanAvatar: realEstateHumanAvatar,
+    robot: {
+      name: "RealtorBot",
+      age: "AI Assistant",
+      expertise: "Property Matching & Customer Tours",
+      skills: ["Listing Recommendations", "Pricing Guidance", "Schedule Tours"],
+    },
+    human: {
+      name: "Olivia Patel",
+      age: "31",
+      skills: ["Local Market Knowledge", "Negotiation", "Customer Care"],
+    },
+  },
 };
 
 export const HeroSection = () => {
   const [selectedUseCase, setSelectedUseCase] = useState<string>("hr-recruitment");
   const [candidateName, setCandidateName] = useState("");
+  const [companyName, setCompanyName] = useState("");
   const [candidateNumber, setCandidateNumber] = useState("");
-  const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState<any>(null);
 
@@ -97,8 +121,8 @@ export const HeroSection = () => {
 
   // ================== Handle Call API ==================
   const handleStartInteraction = async () => {
-    if (!candidateName || !candidateNumber) {
-      alert("Please fill in candidate name and number.");
+    if (!candidateName || !candidateNumber || !companyName) {
+      alert("Please fill in company name, candidate name and number.");
       return;
     }
 
@@ -107,8 +131,8 @@ export const HeroSection = () => {
       const res = await axios.post("http://localhost:3002/api/call", {
         candidateName,
         phoneNumber: candidateNumber,
-        jobDescription: description,
-        useCase: currentUseCase.name, // ✅ backend expects this format
+        companyName,
+        useCase: currentUseCase.name,
       });
 
       setResponse(res.data);
@@ -131,7 +155,8 @@ export const HeroSection = () => {
             <span className="text-foreground">Solutions</span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            Intelligent AI solutions for seamless automation and enhanced user experiences across industries.
+            Intelligent AI solutions for seamless automation and enhanced user
+            experiences across industries.
           </p>
         </div>
 
@@ -139,7 +164,9 @@ export const HeroSection = () => {
           {/* AI Persona */}
           <div className="lg:col-span-2 flex flex-col items-center space-y-4">
             <div className="text-center">
-              <h3 className="text-lg font-semibold text-foreground mb-4">AI Agent</h3>
+              <h3 className="text-lg font-semibold text-foreground mb-4">
+                AI Agent
+              </h3>
               <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-primary shadow-glow mb-4">
                 <img
                   src={currentUseCase.aiAvatar}
@@ -148,20 +175,31 @@ export const HeroSection = () => {
                 />
               </div>
               <div className="space-y-3 text-sm">
-                <h4 className="font-semibold text-foreground text-base">{currentUseCase.robot.name}</h4>
+                <h4 className="font-semibold text-foreground text-base">
+                  {currentUseCase.robot.name}
+                </h4>
                 <p className="text-muted-foreground">{currentUseCase.robot.age}</p>
                 <div className="space-y-2">
                   <p className="font-medium text-primary text-sm">Expertise:</p>
                   <div className="bg-primary/10 rounded-lg px-3 py-2 border border-primary/20">
-                    <p className="text-xs font-medium text-primary">{currentUseCase.robot.expertise}</p>
+                    <p className="text-xs font-medium text-primary">
+                      {currentUseCase.robot.expertise}
+                    </p>
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <p className="font-medium text-foreground text-sm">Primary Skills:</p>
+                  <p className="font-medium text-foreground text-sm">
+                    Primary Skills:
+                  </p>
                   <div className="space-y-1">
                     {currentUseCase.robot.skills.map((skill, index) => (
-                      <div key={index} className="bg-gradient-primary/10 rounded-md px-2 py-1 border border-primary/10">
-                        <p className="text-xs font-medium text-foreground">✨ {skill}</p>
+                      <div
+                        key={index}
+                        className="bg-gradient-primary/10 rounded-md px-2 py-1 border border-primary/10"
+                      >
+                        <p className="text-xs font-medium text-foreground">
+                          ✨ {skill}
+                        </p>
                       </div>
                     ))}
                   </div>
@@ -169,6 +207,9 @@ export const HeroSection = () => {
               </div>
             </div>
           </div>
+
+          {/* Floating Chatbot */}
+          <VoiceChatbot />
 
           {/* Main Form */}
           <div className="lg:col-span-8">
@@ -186,13 +227,29 @@ export const HeroSection = () => {
                       <SelectItem value="insurance-sales">Insurance Product Sales</SelectItem>
                       <SelectItem value="insurance-claims">Insurance Claim Process</SelectItem>
                       <SelectItem value="bank-support">Bank Customer Care</SelectItem>
+                      <SelectItem value="real-estate">Real Estate Agent</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
+                {/* Form fields */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Company Name */}
+                  <div className="space-y-2 md:col-span-2">
+                    <Label htmlFor="company-name" className="text-foreground font-medium">
+                      Company Name
+                    </Label>
+                    <Input
+                      id="company-name"
+                      value={companyName}
+                      onChange={(e) => setCompanyName(e.target.value)}
+                      placeholder="Enter company name"
+                      className="bg-background/50 border-border text-foreground placeholder:text-muted-foreground"
+                    />
+                  </div>
+
                   {/* Candidate Name */}
-                  <div className="space-y-2">
+                  <div className="space-y-2 md:col-span-2">
                     <Label htmlFor="candidate-name" className="text-foreground font-medium">
                       Candidate Name
                     </Label>
@@ -206,7 +263,7 @@ export const HeroSection = () => {
                   </div>
 
                   {/* Candidate Number */}
-                  <div className="space-y-2">
+                  <div className="space-y-2 md:col-span-2">
                     <Label htmlFor="candidate-number" className="text-foreground font-medium">
                       Candidate Number
                     </Label>
@@ -218,30 +275,18 @@ export const HeroSection = () => {
                       className="bg-background/50 border-border text-foreground placeholder:text-muted-foreground"
                     />
                   </div>
-                </div>
 
-                {/* Description */}
-                <div className="space-y-2">
-                  <Label htmlFor="description" className="text-foreground font-medium">
-                    Description
-                  </Label>
-                  <Textarea
-                    id="description"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    placeholder="Describe the specific requirements, objectives, or context..."
-                    rows={4}
-                    className="bg-background/50 border-border text-foreground placeholder:text-muted-foreground resize-none"
-                  />
+                  {/* Submit Button */}
+                  <div className="md:col-span-2">
+                    <Button
+                      onClick={handleStartInteraction}
+                      disabled={loading}
+                      className="w-full bg-gradient-primary hover:shadow-glow transition-all duration-300 text-lg py-6 font-semibold"
+                    >
+                      {loading ? "Starting Call..." : "Start AI Interaction"}
+                    </Button>
+                  </div>
                 </div>
-
-                <Button
-                  onClick={handleStartInteraction}
-                  disabled={loading}
-                  className="w-full bg-gradient-primary hover:shadow-glow transition-all duration-300 text-lg py-6 font-semibold"
-                >
-                  {loading ? "Starting Call..." : "Start AI Interaction"}
-                </Button>
 
                 {/* Backend Response */}
                 {response && (
@@ -257,7 +302,9 @@ export const HeroSection = () => {
           {/* Human Persona */}
           <div className="lg:col-span-2 flex flex-col items-center space-y-4">
             <div className="text-center">
-              <h3 className="text-lg font-semibold text-foreground mb-4">Human User</h3>
+              <h3 className="text-lg font-semibold text-foreground mb-4">
+                Human User
+              </h3>
               <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-primary shadow-glow mb-4">
                 <img
                   src={currentUseCase.humanAvatar}
@@ -266,7 +313,9 @@ export const HeroSection = () => {
                 />
               </div>
               <div className="space-y-3 text-sm">
-                <h4 className="font-semibold text-foreground text-base">{currentUseCase.human.name}</h4>
+                <h4 className="font-semibold text-foreground text-base">
+                  {currentUseCase.human.name}
+                </h4>
                 <p className="text-muted-foreground">Age: {currentUseCase.human.age}</p>
                 <div className="space-y-2">
                   <p className="font-medium text-foreground text-sm">Primary Skills:</p>
@@ -285,7 +334,7 @@ export const HeroSection = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> 
     </section>
   );
 };
