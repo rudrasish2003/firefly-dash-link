@@ -5,7 +5,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
+import axios from "axios";
 
+// Avatars
 import hrAiAvatar from "@/assets/hr-ai-avatar.png";
 import hrHumanAvatar from "@/assets/hr-human-avatar.png";
 import insuranceAiAvatar from "@/assets/insurance-ai-avatar.png";
@@ -15,6 +17,7 @@ import claimsHumanAvatar from "@/assets/claims-human-avatar.png";
 import bankAiAvatar from "@/assets/bank-ai-avatar.png";
 import bankHumanAvatar from "@/assets/bank-human-avatar.png";
 
+// ================== Use Cases ==================
 const useCases = {
   "hr-recruitment": {
     name: "HR-Recruitment",
@@ -24,13 +27,13 @@ const useCases = {
       name: "Alex HR Bot",
       age: "AI Assistant",
       expertise: "Talent Acquisition & Screening",
-      skills: ["Candidate Screening", "Interview Scheduling", "Resume Analysis"]
+      skills: ["Candidate Screening", "Interview Scheduling", "Resume Analysis"],
     },
     human: {
       name: "Sarah Johnson",
       age: "28",
-      skills: ["Communication", "Problem Solving", "Team Collaboration"]
-    }
+      skills: ["Communication", "Problem Solving", "Team Collaboration"],
+    },
   },
   "insurance-sales": {
     name: "Insurance Product Sales",
@@ -40,13 +43,13 @@ const useCases = {
       name: "InsureBot Pro",
       age: "AI Agent",
       expertise: "Insurance Sales & Advisory",
-      skills: ["Product Knowledge", "Risk Assessment", "Policy Matching"]
+      skills: ["Product Knowledge", "Risk Assessment", "Policy Matching"],
     },
     human: {
       name: "Mike Chen",
       age: "35",
-      skills: ["Sales Experience", "Customer Relations", "Financial Planning"]
-    }
+      skills: ["Sales Experience", "Customer Relations", "Financial Planning"],
+    },
   },
   "insurance-claims": {
     name: "Insurance Claim Process",
@@ -56,13 +59,13 @@ const useCases = {
       name: "ClaimBot Assistant",
       age: "AI Support",
       expertise: "Claims Processing & Resolution",
-      skills: ["Document Processing", "Claim Validation", "Quick Resolution"]
+      skills: ["Document Processing", "Claim Validation", "Quick Resolution"],
     },
     human: {
       name: "Emma Davis",
       age: "32",
-      skills: ["Attention to Detail", "Empathy", "Process Management"]
-    }
+      skills: ["Attention to Detail", "Empathy", "Process Management"],
+    },
   },
   "bank-support": {
     name: "Bank Customer Care",
@@ -72,20 +75,51 @@ const useCases = {
       name: "BankBot Helper",
       age: "AI Support",
       expertise: "Banking & Customer Service",
-      skills: ["Account Management", "Transaction Support", "Security Protocols"]
+      skills: ["Account Management", "Transaction Support", "Security Protocols"],
     },
     human: {
       name: "James Wilson",
       age: "29",
-      skills: ["Customer Service", "Banking Knowledge", "Problem Resolution"]
-    }
-  }
+      skills: ["Customer Service", "Banking Knowledge", "Problem Resolution"],
+    },
+  },
 };
 
 export const HeroSection = () => {
   const [selectedUseCase, setSelectedUseCase] = useState<string>("hr-recruitment");
+  const [candidateName, setCandidateName] = useState("");
+  const [candidateNumber, setCandidateNumber] = useState("");
+  const [description, setDescription] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [response, setResponse] = useState<any>(null);
 
   const currentUseCase = useCases[selectedUseCase as keyof typeof useCases];
+
+  // ================== Handle Call API ==================
+  const handleStartInteraction = async () => {
+    if (!candidateName || !candidateNumber) {
+      alert("Please fill in candidate name and number.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await axios.post("http://localhost:3002/api/call", {
+        candidateName,
+        phoneNumber: candidateNumber,
+        jobDescription: description,
+        useCase: currentUseCase.name, // ✅ backend expects this format
+      });
+
+      setResponse(res.data);
+      alert(`Call started! Call ID: ${res.data.callId}`);
+    } catch (err: any) {
+      console.error(err.response?.data || err.message);
+      alert("Failed to start call. Check console for details.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <section className="py-20 px-4">
@@ -101,15 +135,14 @@ export const HeroSection = () => {
           </p>
         </div>
 
-        {/* Form with Personas */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Robot Persona */}
+          {/* AI Persona */}
           <div className="lg:col-span-2 flex flex-col items-center space-y-4">
             <div className="text-center">
               <h3 className="text-lg font-semibold text-foreground mb-4">AI Agent</h3>
               <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-primary shadow-glow mb-4">
-                <img 
-                  src={currentUseCase.aiAvatar} 
+                <img
+                  src={currentUseCase.aiAvatar}
                   alt={`${currentUseCase.robot.name} avatar`}
                   className="w-full h-full object-cover"
                 />
@@ -165,6 +198,8 @@ export const HeroSection = () => {
                     </Label>
                     <Input
                       id="candidate-name"
+                      value={candidateName}
+                      onChange={(e) => setCandidateName(e.target.value)}
                       placeholder="Enter candidate name"
                       className="bg-background/50 border-border text-foreground placeholder:text-muted-foreground"
                     />
@@ -177,6 +212,8 @@ export const HeroSection = () => {
                     </Label>
                     <Input
                       id="candidate-number"
+                      value={candidateNumber}
+                      onChange={(e) => setCandidateNumber(e.target.value)}
                       placeholder="+1234567890"
                       className="bg-background/50 border-border text-foreground placeholder:text-muted-foreground"
                     />
@@ -190,15 +227,29 @@ export const HeroSection = () => {
                   </Label>
                   <Textarea
                     id="description"
-                    placeholder="Describe the specific requirements, objectives, or context for this interaction..."
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Describe the specific requirements, objectives, or context..."
                     rows={4}
                     className="bg-background/50 border-border text-foreground placeholder:text-muted-foreground resize-none"
                   />
                 </div>
 
-                <Button className="w-full bg-gradient-primary hover:shadow-glow transition-all duration-300 text-lg py-6 font-semibold">
-                  Start AI Interaction
+                <Button
+                  onClick={handleStartInteraction}
+                  disabled={loading}
+                  className="w-full bg-gradient-primary hover:shadow-glow transition-all duration-300 text-lg py-6 font-semibold"
+                >
+                  {loading ? "Starting Call..." : "Start AI Interaction"}
                 </Button>
+
+                {/* Backend Response */}
+                {response && (
+                  <div className="mt-6 p-4 bg-background border rounded-lg text-sm">
+                    <p className="font-semibold">Assistant ID: {response.assistantId}</p>
+                    <p className="font-semibold">Call ID: {response.callId}</p>
+                  </div>
+                )}
               </div>
             </Card>
           </div>
@@ -208,8 +259,8 @@ export const HeroSection = () => {
             <div className="text-center">
               <h3 className="text-lg font-semibold text-foreground mb-4">Human User</h3>
               <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-primary shadow-glow mb-4">
-                <img 
-                  src={currentUseCase.humanAvatar} 
+                <img
+                  src={currentUseCase.humanAvatar}
                   alt={`${currentUseCase.human.name} avatar`}
                   className="w-full h-full object-cover"
                 />
@@ -221,7 +272,10 @@ export const HeroSection = () => {
                   <p className="font-medium text-foreground text-sm">Primary Skills:</p>
                   <div className="space-y-1">
                     {currentUseCase.human.skills.map((skill, index) => (
-                      <div key={index} className="bg-gradient-secondary/10 rounded-md px-2 py-1 border border-secondary/20">
+                      <div
+                        key={index}
+                        className="bg-gradient-secondary/10 rounded-md px-2 py-1 border border-secondary/20"
+                      >
                         <p className="text-xs font-medium text-foreground">🎯 {skill}</p>
                       </div>
                     ))}
