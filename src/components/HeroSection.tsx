@@ -5,11 +5,21 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
-import { Bot, User } from "lucide-react";
+
+import hrAiAvatar from "@/assets/hr-ai-avatar.png";
+import hrHumanAvatar from "@/assets/hr-human-avatar.png";
+import insuranceAiAvatar from "@/assets/insurance-ai-avatar.png";
+import insuranceHumanAvatar from "@/assets/insurance-human-avatar.png";
+import claimsAiAvatar from "@/assets/claims-ai-avatar.png";
+import claimsHumanAvatar from "@/assets/claims-human-avatar.png";
+import bankAiAvatar from "@/assets/bank-ai-avatar.png";
+import bankHumanAvatar from "@/assets/bank-human-avatar.png";
 
 const useCases = {
   "hr-recruitment": {
     name: "HR-Recruitment",
+    aiAvatar: hrAiAvatar,
+    humanAvatar: hrHumanAvatar,
     robot: {
       name: "Alex HR Bot",
       age: "AI Assistant",
@@ -23,6 +33,8 @@ const useCases = {
   },
   "insurance-sales": {
     name: "Insurance Product Sales",
+    aiAvatar: insuranceAiAvatar,
+    humanAvatar: insuranceHumanAvatar,
     robot: {
       name: "InsureBot Pro",
       age: "AI Agent",
@@ -36,6 +48,8 @@ const useCases = {
   },
   "insurance-claims": {
     name: "Insurance Claim Process",
+    aiAvatar: claimsAiAvatar,
+    humanAvatar: claimsHumanAvatar,
     robot: {
       name: "ClaimBot Assistant",
       age: "AI Support",
@@ -49,6 +63,8 @@ const useCases = {
   },
   "bank-support": {
     name: "Bank Customer Care",
+    aiAvatar: bankAiAvatar,
+    humanAvatar: bankHumanAvatar,
     robot: {
       name: "BankBot Helper",
       age: "AI Support",
@@ -87,8 +103,12 @@ export const HeroSection = () => {
           <div className="lg:col-span-2 flex flex-col items-center space-y-4">
             <div className="text-center">
               <h3 className="text-lg font-semibold text-foreground mb-4">AI Agent</h3>
-              <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-primary shadow-glow bg-gradient-primary flex items-center justify-center mb-4">
-                <Bot className="w-16 h-16 text-white" />
+              <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-primary shadow-glow mb-4">
+                <img 
+                  src={currentUseCase.aiAvatar} 
+                  alt={`${currentUseCase.robot.name} avatar`}
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div className="space-y-2 text-sm">
                 <h4 className="font-semibold text-foreground">{currentUseCase.robot.name}</h4>
@@ -173,8 +193,12 @@ export const HeroSection = () => {
           <div className="lg:col-span-2 flex flex-col items-center space-y-4">
             <div className="text-center">
               <h3 className="text-lg font-semibold text-foreground mb-4">Human User</h3>
-              <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-primary shadow-glow bg-gradient-secondary flex items-center justify-center mb-4">
-                <User className="w-16 h-16 text-white" />
+              <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-primary shadow-glow mb-4">
+                <img 
+                  src={currentUseCase.humanAvatar} 
+                  alt={`${currentUseCase.human.name} avatar`}
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div className="space-y-2 text-sm">
                 <h4 className="font-semibold text-foreground">{currentUseCase.human.name}</h4>
