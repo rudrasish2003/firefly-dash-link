@@ -42,7 +42,7 @@ const VoiceChatbot: React.FC = () => {
   }, [messages]);
 
   useEffect(() => {
-    const vapi = new Vapi("090a9b90-b436-426e-adb9-52728fe938b5"); // replace with your key
+    const vapi = new Vapi("090a9b90-b436-426e-adb9-52728fe938b5"); // replace with your real key
     vapiRef.current = vapi;
 
     vapi.on("call-start", () => setIsConnected(true));
@@ -56,6 +56,45 @@ const VoiceChatbot: React.FC = () => {
     };
   }, []);
 
+  // ================= Dynamic Prompt Loader =================
+  const submitWebsiteUrl = async () => {
+    if (!websiteUrl.trim()) return;
+    setIsLoadingUrl(true);
+    try {
+      const res = await fetch("http://localhost:3002/generatePrompt", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: websiteUrl }),
+      });
+      const data = await res.json();
+
+      if (data?.prompt) {
+        // ✅ Update Vapi session dynamically
+        vapiRef.current?.updateSession({
+          assistant: { instructions: data.prompt },
+        });
+
+        // ✅ Add system message in chat to show context updated
+        setMessages((p) => [
+          ...p,
+          {
+            id: Date.now().toString(),
+            text: "🔄 Assistant updated with latest website context.",
+            sender: "bot",
+            timestamp: new Date(),
+          },
+        ]);
+
+        setIsConnected(true);
+      }
+    } catch (err) {
+      console.error("Website load error:", err);
+    } finally {
+      setIsLoadingUrl(false);
+    }
+  };
+
+  // ================= Voice Controls =================
   const toggleListening = () => {
     if (isListening) {
       vapiRef.current?.stop();
@@ -74,6 +113,7 @@ const VoiceChatbot: React.FC = () => {
 
   const toggleExpanded = () => setIsExpanded((s) => !s);
 
+  // ================= Text Chat =================
   const sendTextMessage = async () => {
     if (!currentMessage.trim()) return;
 
@@ -146,7 +186,6 @@ const VoiceChatbot: React.FC = () => {
               </Button>
             </div>
             {/* URL input */}
-            {/* URL input (always visible until connected) */}
             {!isConnected && (
               <div className="flex gap-2 mt-3">
                 <Input
@@ -156,23 +195,7 @@ const VoiceChatbot: React.FC = () => {
                   className="h-8 text-sm flex-1"
                 />
                 <Button
-                  onClick={async () => {
-                    if (!websiteUrl.trim()) return;
-                    setIsLoadingUrl(true);
-                    try {
-                      const res = await fetch("http://localhost:3002/load-website", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ url: websiteUrl }),
-                      });
-                      await res.json();
-                      setIsConnected(true);
-                    } catch (err) {
-                      console.error("Website load error:", err);
-                    } finally {
-                      setIsLoadingUrl(false);
-                    }
-                  }}
+                  onClick={submitWebsiteUrl}
                   disabled={isLoadingUrl}
                   className="h-8 text-sm"
                 >
@@ -235,14 +258,18 @@ const VoiceChatbot: React.FC = () => {
                       {messages.map((message) => (
                         <div
                           key={message.id}
-                          className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"
-                            }`}
+                          className={`flex ${
+                            message.sender === "user"
+                              ? "justify-end"
+                              : "justify-start"
+                          }`}
                         >
                           <div
-                            className={`max-w-[80%] rounded-lg px-3 py-2 ${message.sender === "user"
+                            className={`max-w-[80%] rounded-lg px-3 py-2 ${
+                              message.sender === "user"
                                 ? "bg-voice-primary text-primary-foreground"
                                 : "bg-muted text-foreground"
-                              }`}
+                            }`}
                           >
                             <p className="text-sm">{message.text}</p>
                             <p className="text-xs opacity-70 mt-1">
@@ -268,7 +295,11 @@ const VoiceChatbot: React.FC = () => {
                       placeholder="Type your message..."
                       className="flex-1"
                     />
-                    <Button onClick={sendTextMessage} disabled={!currentMessage.trim()} size="icon">
+                    <Button
+                      onClick={sendTextMessage}
+                      disabled={!currentMessage.trim()}
+                      size="icon"
+                    >
                       <Send className="h-4 w-4" />
                     </Button>
                   </div>
@@ -302,7 +333,6 @@ const VoiceChatbot: React.FC = () => {
                     )}
                   </>
                 ) : (
-                  // empty body while waiting for the URL (header holds the input now)
                   <div className="h-full" />
                 )}
               </div>
@@ -319,16 +349,26 @@ const VoiceChatbot: React.FC = () => {
                   onClick={toggleMute}
                   className="h-8 w-8 text-muted-foreground hover:text-foreground"
                 >
-                  {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+                  {isMuted ? (
+                    <VolumeX className="h-4 w-4" />
+                  ) : (
+                    <Volume2 className="h-4 w-4" />
+                  )}
                 </Button>
 
                 <Button
                   variant={isListening ? "destructive" : "default"}
                   size="icon"
                   onClick={toggleListening}
-                  className={`h-12 w-12 rounded-full ${isListening ? "animate-pulse-glow" : ""}`}
+                  className={`h-12 w-12 rounded-full ${
+                    isListening ? "animate-pulse-glow" : ""
+                  }`}
                 >
-                  {isListening ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
+                  {isListening ? (
+                    <MicOff className="h-5 w-5" />
+                  ) : (
+                    <Mic className="h-5 w-5" />
+                  )}
                 </Button>
               </div>
             </div>
@@ -342,9 +382,17 @@ const VoiceChatbot: React.FC = () => {
           variant="default"
           size="icon"
           onClick={isExpanded ? toggleListening : toggleExpanded}
-          className={`h-14 w-14 rounded-full shadow-voice ${isListening ? "animate-pulse-glow" : "hover:scale-110"} transition-all duration-300`}
+          className={`h-14 w-14 rounded-full shadow-voice ${
+            isListening ? "animate-pulse-glow" : "hover:scale-110"
+          } transition-all duration-300`}
         >
-          {isExpanded && isListening ? <MicOff className="h-6 w-6" /> : isExpanded ? <Mic className="h-6 w-6" /> : <MessageSquare className="h-6 w-6" />}
+          {isExpanded && isListening ? (
+            <MicOff className="h-6 w-6" />
+          ) : isExpanded ? (
+            <Mic className="h-6 w-6" />
+          ) : (
+            <MessageSquare className="h-6 w-6" />
+          )}
         </Button>
 
         {isConnected && !isExpanded && (
