@@ -146,7 +146,8 @@ const VoiceChatbot: React.FC = () => {
               </Button>
             </div>
             {/* URL input */}
-            {chatMode === "voice" && !isConnected && (
+            {/* URL input (always visible until connected) */}
+            {!isConnected && (
               <div className="flex gap-2 mt-3">
                 <Input
                   value={websiteUrl}
@@ -159,14 +160,11 @@ const VoiceChatbot: React.FC = () => {
                     if (!websiteUrl.trim()) return;
                     setIsLoadingUrl(true);
                     try {
-                      const res = await fetch(
-                        "http://localhost:3002/load-website",
-                        {
-                          method: "POST",
-                          headers: { "Content-Type": "application/json" },
-                          body: JSON.stringify({ url: websiteUrl }),
-                        }
-                      );
+                      const res = await fetch("http://localhost:3002/load-website", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ url: websiteUrl }),
+                      });
                       await res.json();
                       setIsConnected(true);
                     } catch (err) {
@@ -182,6 +180,7 @@ const VoiceChatbot: React.FC = () => {
                 </Button>
               </div>
             )}
+
             {/* Mode toggle + volume */}
             <div className="flex items-center justify-between mt-2">
               <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
@@ -236,16 +235,14 @@ const VoiceChatbot: React.FC = () => {
                       {messages.map((message) => (
                         <div
                           key={message.id}
-                          className={`flex ${
-                            message.sender === "user" ? "justify-end" : "justify-start"
-                          }`}
+                          className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"
+                            }`}
                         >
                           <div
-                            className={`max-w-[80%] rounded-lg px-3 py-2 ${
-                              message.sender === "user"
+                            className={`max-w-[80%] rounded-lg px-3 py-2 ${message.sender === "user"
                                 ? "bg-voice-primary text-primary-foreground"
                                 : "bg-muted text-foreground"
-                            }`}
+                              }`}
                           >
                             <p className="text-sm">{message.text}</p>
                             <p className="text-xs opacity-70 mt-1">
