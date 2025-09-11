@@ -23,6 +23,8 @@ import claimsAiAvatar from "@/assets/claims-ai-avatar.png";
 import claimsHumanAvatar from "@/assets/claims-human-avatar.png";
 import bankAiAvatar from "@/assets/bank-ai-avatar.png";
 import bankHumanAvatar from "@/assets/bank-human-avatar.png";
+import realEstateAiAvatar from "@/assets/real-estate-ai-avatar.png";
+import realEstateHumanAvatar from "@/assets/real-estate-human-avatar.png";
 
 // ================== Use Cases ==================
 const useCases = {
@@ -91,21 +93,21 @@ const useCases = {
     },
   },
   "real-estate": {
-  name: "Real Estate Enquiry",
-  aiAvatar: "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRyOfNxyO1J_vEJOu7qAv2LiQRdF-rXaaUHYqrvidjnuQIyZxWA",
-  humanAvatar: "https://t3.ftcdn.net/jpg/13/41/89/02/360_F_1341890295_Ed4pQXKuJmzZOLMk5EDCb5jjsuCEewCQ.jpg",
-  robot: {
-    name: "RealtorBot",
-    age: "AI Assistant",
-    expertise: "Property Matching & Customer Tours",
-    skills: ["Listing Recommendations", "Pricing Guidance", "Schedule Tours"],
+    name: "Real Estate Enquiry",
+    aiAvatar: "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRyOfNxyO1J_vEJOu7qAv2LiQRdF-rXaaUHYqrvidjnuQIyZxWA",
+    humanAvatar: "https://t3.ftcdn.net/jpg/13/41/89/02/360_F_1341890295_Ed4pQXKuJmzZOLMk5EDCb5jjsuCEewCQ.jpg",
+    robot: {
+      name: "RealtorBot",
+      age: "AI Assistant",
+      expertise: "Property Matching & Customer Tours",
+      skills: ["Listing Recommendations", "Pricing Guidance", "Schedule Tours"],
+    },
+    human: {
+      name: "Olivia Patel",
+      age: "31",
+      skills: ["Local Market Knowledge", "Negotiation", "Customer Care"],
+    },
   },
-  human: {
-    name: "Olivia Patel",
-    age: "31",
-    skills: ["Local Market Knowledge", "Negotiation", "Customer Care"],
-  },
-},
 
 };
 
@@ -160,6 +162,8 @@ export const HeroSection = () => {
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             Intelligent AI solutions for seamless automation and enhanced user
             experiences across industries.
+            Intelligent AI solutions for seamless automation and enhanced user
+            experiences across industries.
           </p>
         </div>
 
@@ -167,6 +171,9 @@ export const HeroSection = () => {
           {/* AI Persona */}
           <div className="lg:col-span-2 flex flex-col items-center space-y-4">
             <div className="text-center">
+              <h3 className="text-lg font-semibold text-foreground mb-4">
+                AI Agent
+              </h3>
               <h3 className="text-lg font-semibold text-foreground mb-4">
                 AI Agent
               </h3>
@@ -190,24 +197,30 @@ export const HeroSection = () => {
                     <p className="text-xs font-medium text-primary">
                       {currentUseCase.robot.expertise}
                     </p>
+                    <p className="text-xs font-medium text-primary">
+                      {currentUseCase.robot.expertise}
+                    </p>
                   </div>
                 </div>
                 <div className="space-y-2">
                   <p className="font-medium text-foreground text-sm">
                     Primary Skills:
                   </p>
-                  <div className="space-y-1">
-                    {currentUseCase.robot.skills.map((skill, index) => (
-                      <div
-                        key={index}
-                        className="bg-gradient-primary/10 rounded-md px-2 py-1 border border-primary/10"
-                      >
-                        <p className="text-xs font-medium text-foreground">
-                          ✨ {skill}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
+                  <p className="font-medium text-foreground text-sm">
+                    Primary Skills:
+                  </p>
+                <div className="space-y-1">
+                  {currentUseCase.robot.skills.map((skill, index) => (
+                    <div
+                      key={index}
+                      className="bg-gradient-primary/10 rounded-md px-2 py-1 border border-primary/10"
+                    >
+                      <p className="text-xs font-medium text-foreground">
+                        ✨ {skill}
+                      </p>
+                    </div>
+                  ))}
+                </div>
                 </div>
               </div>
             </div>
@@ -298,36 +311,56 @@ export const HeroSection = () => {
                       placeholder="+1234567890"
                       className="bg-background/50 border-border text-foreground placeholder:text-muted-foreground"
                     />
-                  </div>
-
-                  {/* Full-width button */}
-                  <div className="md:col-span-2">
-                    <Button
-                      onClick={handleStartInteraction}
-                      disabled={loading}
-                      className="w-full bg-gradient-primary hover:shadow-glow transition-all duration-300 text-lg py-6 font-semibold"
-                    >
-                      {loading ? "Starting Call..." : "Start AI Interaction"}
-                    </Button>
-                  </div>
                 </div>
 
-                {/* Backend Response */}
-                {response && (
-                  <div className="mt-6 p-4 bg-background border rounded-lg text-sm">
-                    <p className="font-semibold">
-                      Assistant ID: {response.assistantId}
-                    </p>
-                    <p className="font-semibold">Call ID: {response.callId}</p>
-                  </div>
-                )}
+                {/* Job Description */}
+                <div className="space-y-2 md:col-span-2">
+                  <Label
+                    htmlFor="job-description"
+                    className="text-foreground font-medium"
+                  >
+                    Job Description
+                  </Label>
+                  <Textarea
+                    id="job-description"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Enter job description"
+                    className="bg-background/50 border-border text-foreground placeholder:text-muted-foreground"
+                  />
+                </div>
+
+                {/* Full-width button */}
+                <div className="md:col-span-2">
+                  <Button
+                    onClick={handleStartInteraction}
+                    disabled={loading}
+                    className="w-full bg-gradient-primary hover:shadow-glow transition-all duration-300 text-lg py-6 font-semibold"
+                  >
+                    {loading ? "Starting Call..." : "Start AI Interaction"}
+                  </Button>
+                </div>
               </div>
+              </div>
+
+              {/* Backend Response */}
+              {response && (
+                <div className="mt-6 p-4 bg-background border rounded-lg text-sm">
+                  <p className="font-semibold">
+                    Assistant ID: {response.assistantId}
+                  </p>
+                  <p className="font-semibold">Call ID: {response.callId}</p>
+                </div>
+              )}
             </Card>
           </div>
 
           {/* Human Persona */}
           <div className="lg:col-span-2 flex flex-col items-center space-y-4">
             <div className="text-center">
+              <h3 className="text-lg font-semibold text-foreground mb-4">
+                Human User
+              </h3>
               <h3 className="text-lg font-semibold text-foreground mb-4">
                 Human User
               </h3>
@@ -339,6 +372,9 @@ export const HeroSection = () => {
                 />
               </div>
               <div className="space-y-3 text-sm">
+                <h4 className="font-semibold text-foreground text-base">
+                  {currentUseCase.human.name}
+                </h4>
                 <h4 className="font-semibold text-foreground text-base">
                   {currentUseCase.human.name}
                 </h4>
@@ -360,7 +396,7 @@ export const HeroSection = () => {
             </div>
           </div>
         </div>
-      </div> 
-    </section>
+      </div>
+    </section >
   );
 };

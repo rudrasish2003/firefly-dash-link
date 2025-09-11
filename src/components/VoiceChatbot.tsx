@@ -3,30 +3,30 @@ import Vapi from "@vapi-ai/web";
 import { Mic, MicOff, Volume2, VolumeX, MessageSquare, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-
+ 
 const VoiceChatbot = () => {
   const [isListening, setIsListening] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
   const vapiRef = useRef<any>(null);
-
+ 
   // Setup Vapi once
   useEffect(() => {
     const vapi = new Vapi("090a9b90-b436-426e-adb9-52728fe938b5"); // 🔑 Replace with your Public API Key
     vapiRef.current = vapi;
-
+ 
     vapi.on("call-start", () => setIsConnected(true));
     vapi.on("call-end", () => {
       setIsConnected(false);
       setIsListening(false);
     });
-
+ 
     return () => {
       vapi.stop();
     };
   }, []);
-
+ 
   // Start / Stop
   const toggleListening = () => {
     if (isListening) {
@@ -40,17 +40,17 @@ const VoiceChatbot = () => {
       setIsConnected(true);
     }
   };
-
+ 
   // Mute / Unmute
   const toggleMute = () => {
     vapiRef.current?.setMuted(!isMuted);
     setIsMuted(!isMuted);
   };
-
+ 
   const toggleExpanded = () => {
     setIsExpanded(!isExpanded);
   };
-
+ 
   return (
     <div className="fixed bottom-6 right-6 z-50">
       {/* Expanded Chat Interface */}
@@ -75,7 +75,7 @@ const VoiceChatbot = () => {
               </Button>
             </div>
           </div>
-
+ 
           {/* Body */}
           <div className="flex-1 p-4 overflow-y-auto">
             {isConnected ? (
@@ -113,7 +113,7 @@ const VoiceChatbot = () => {
               </div>
             )}
           </div>
-
+ 
           {/* Footer */}
           <div className="p-4 border-t border-voice-primary/20 bg-gradient-glow">
             <div className="flex items-center justify-center gap-3">
@@ -129,7 +129,7 @@ const VoiceChatbot = () => {
                   <Volume2 className="h-4 w-4" />
                 )}
               </Button>
-
+ 
               <Button
                 variant={isListening ? "destructive" : "default"}
                 size="icon"
@@ -148,7 +148,7 @@ const VoiceChatbot = () => {
           </div>
         </Card>
       )}
-
+ 
       {/* Floating Voice Button */}
       <div className="relative">
         <Button
@@ -167,7 +167,7 @@ const VoiceChatbot = () => {
             <MessageSquare className="h-6 w-6" />
           )}
         </Button>
-
+ 
         {/* Status indicator */}
         {isConnected && !isExpanded && (
           <div className="absolute -top-1 -right-1 w-4 h-4 bg-voice-primary rounded-full animate-pulse-glow border-2 border-background"></div>
@@ -176,5 +176,5 @@ const VoiceChatbot = () => {
     </div>
   );
 };
-
+ 
 export default VoiceChatbot;
