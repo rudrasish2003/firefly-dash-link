@@ -10,7 +10,7 @@ export const Header = () => {
             <div className="w-10 h-10 bg-gradient-primary rounded-xl flex items-center justify-center text-primary-foreground font-bold text-lg">
               AI
             </div>
-            <span className="text-xl font-bold">VyomAi</span>
+            <span className="text-xl font-bold">VYOM Ai</span>
           </div>
 
           {/* Navigation */}

@@ -23,8 +23,6 @@ import claimsAiAvatar from "@/assets/claims-ai-avatar.png";
 import claimsHumanAvatar from "@/assets/claims-human-avatar.png";
 import bankAiAvatar from "@/assets/bank-ai-avatar.png";
 import bankHumanAvatar from "@/assets/bank-human-avatar.png";
-import realEstateAiAvatar from "@/assets/real-estate-ai-avatar.png";
-import realEstateHumanAvatar from "@/assets/real-estate-human-avatar.png";
 
 // ================== Use Cases ==================
 const useCases = {
@@ -36,12 +34,24 @@ const useCases = {
       name: "Alex HR Bot",
       age: "AI Assistant",
       expertise: "Talent Acquisition & Screening",
-      skills: ["Candidate Screening", "Interview Scheduling", "Resume Analysis"],
+      skills: [
+        "Screens candidates with accuracy",
+        "Schedules interviews seamlessly end-to-end",
+        "Analyzes resumes for role fit",
+        "Provides detailed hiring insights",
+      ],
     },
     human: {
       name: "Sarah Johnson",
       age: "28",
-      skills: ["Communication", "Problem Solving", "Team Collaboration"],
+      gender:"F",
+      expertise: "HR Operations & Recruitment",
+      skills: [
+        "Communicates effectively across teams",
+        "Solves complex problems efficiently",
+        "Collaborates within diverse environments",
+        "Manages onboarding from start to end",
+      ],
     },
   },
   "insurance-sales": {
@@ -52,12 +62,24 @@ const useCases = {
       name: "InsureBot Pro",
       age: "AI Agent",
       expertise: "Insurance Sales & Advisory",
-      skills: ["Product Knowledge", "Risk Assessment", "Policy Matching"],
+      skills: [
+        "Explains insurance products clearly",
+        "Assesses client risks accurately",
+        "Matches policies to customer needs",
+        "Guides customers through buying steps",
+      ],
     },
     human: {
       name: "Mike Chen",
       age: "35",
-      skills: ["Sales Experience", "Customer Relations", "Financial Planning"],
+      gender:"M",
+      expertise: "Insurance Sales & Customer Advisory",
+      skills: [
+        "Builds long-term client relationships",
+        "Provides sound financial planning",
+        "Drives consistent sales growth",
+        "Advises customers on best-fit plans",
+      ],
     },
   },
   "insurance-claims": {
@@ -68,12 +90,24 @@ const useCases = {
       name: "ClaimBot Assistant",
       age: "AI Support",
       expertise: "Claims Processing & Resolution",
-      skills: ["Document Processing", "Claim Validation", "Quick Resolution"],
+      skills: [
+        "Processes documents with high accuracy",
+        "Validates claims within set timelines",
+        "Resolves issues quickly and efficiently",
+        "Provides clear customer claim updates",
+      ],
     },
     human: {
       name: "Emma Davis",
       age: "32",
-      skills: ["Attention to Detail", "Empathy", "Process Management"],
+      gender:"F",
+      expertise: "Claims Handling & Customer Support",
+      skills: [
+        "Demonstrates empathy in interactions",
+        "Manages processes end-to-end smoothly",
+        "Ensures compliance with claim policies",
+        "Communicates updates clearly to clients",
+      ],
     },
   },
   "bank-support": {
@@ -84,12 +118,24 @@ const useCases = {
       name: "BankBot Helper",
       age: "AI Support",
       expertise: "Banking & Customer Service",
-      skills: ["Account Management", "Transaction Support", "Security Protocols"],
+      skills: [
+        "Supports transactions in real time",
+        "Guides users through account management",
+        "Enforces strong security protocols",
+        "Resolves customer issues efficiently",
+      ],
     },
     human: {
       name: "James Wilson",
       age: "29",
-      skills: ["Customer Service", "Banking Knowledge", "Problem Resolution"],
+      gender:"M",
+      expertise: "Banking Operations & Customer Support",
+      skills: [
+        "Delivers outstanding customer service",
+        "Resolves issues quickly under pressure",
+        "Provides accurate banking information",
+        "Assists clients with financial needs",
+      ],
     },
   },
   "real-estate": {
@@ -100,16 +146,28 @@ const useCases = {
       name: "RealtorBot",
       age: "AI Assistant",
       expertise: "Property Matching & Customer Tours",
-      skills: ["Listing Recommendations", "Pricing Guidance", "Schedule Tours"],
+      skills: [
+        "Recommends listings based on needs",
+        "Provides accurate pricing guidance",
+        "Schedules property tours effectively",
+        "Matches clients with ideal homes",
+      ],
     },
     human: {
       name: "Olivia Patel",
       age: "31",
-      skills: ["Local Market Knowledge", "Negotiation", "Customer Care"],
+      gender:"F",
+      expertise: "Real Estate Advisory & Client Relations",
+      skills: [
+        "Understands local market deeply",
+        "Negotiates deals with confidence",
+        "Advises clients on property choices",
+        "Builds long-term client trust",
+      ],
     },
   },
-
 };
+
 
 export const HeroSection = () => {
   const [selectedUseCase, setSelectedUseCase] = useState<string>(
@@ -167,70 +225,66 @@ export const HeroSection = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           {/* AI Persona */}
-          <div className="lg:col-span-2 flex flex-col items-center space-y-4">
-            <div className="text-center">
+          <div className="lg:col-span-3">
+            <Card className="p-6 text-center shadow-card">
               <h3 className="text-lg font-semibold text-foreground mb-4">
-                AI Agent
+                VYOM Ai
               </h3>
-              <h3 className="text-lg font-semibold text-foreground mb-4">
-                AI Agent
-              </h3>
-              <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-primary shadow-glow mb-4">
+              <div className="w-32 h-32 mx-auto rounded-full overflow-hidden border-4 border-primary shadow-glow flex items-center justify-center">
                 <img
                   src={currentUseCase.aiAvatar}
                   alt={`${currentUseCase.robot.name} avatar`}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover object-center"
                 />
               </div>
-              <div className="space-y-3 text-sm">
+
+              {/* Name + Age */}
+              <div className="mt-4 space-y-2">
                 <h4 className="font-semibold text-foreground text-base">
                   {currentUseCase.robot.name}
                 </h4>
-                <p className="text-muted-foreground">
-                  {currentUseCase.robot.age}
-                </p>
-                <div className="space-y-2">
-                  <p className="font-medium text-primary text-sm">Expertise:</p>
-                  <div className="bg-primary/10 rounded-lg px-3 py-2 border border-primary/20">
-                    <p className="text-xs font-medium text-primary">
-                      {currentUseCase.robot.expertise}
-                    </p>
-                    <p className="text-xs font-medium text-primary">
-                      {currentUseCase.robot.expertise}
-                    </p>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <p className="font-medium text-foreground text-sm">
-                    Primary Skills:
+                <p className="text-muted-foreground">{currentUseCase.robot.age}</p>
+              </div>
+
+              {/* CV Style Info */}
+              <div className="mt-6 space-y-4 text-left">
+                {/* Expertise Row */}
+                <div>
+                  <p className="font-bold text-sm text-muted-foreground mb-1">
+                    Expertise
                   </p>
-                  <p className="font-medium text-foreground text-sm">
-                    Primary Skills:
+                  <p className="text-sm font-semibold text-foreground">
+                    {currentUseCase.robot.expertise}
                   </p>
-                <div className="space-y-1">
-                  {currentUseCase.robot.skills.map((skill, index) => (
-                    <div
-                      key={index}
-                      className="bg-gradient-primary/10 rounded-md px-2 py-1 border border-primary/10"
-                    >
-                      <p className="text-xs font-medium text-foreground">
-                        ✨ {skill}
-                      </p>
-                    </div>
-                  ))}
                 </div>
+
+                {/* Skills Row */}
+                <div>
+                  <p className="font-bold text-sm text-muted-foreground mb-1">
+                    Primary Skills
+                  </p>
+                  <ul className="space-y-1 pl-4">
+                    {currentUseCase.robot.skills.map((skill, index) => (
+                      <li
+                        key={index}
+                        className="text-sm text-foreground list-disc"
+                      >
+                        {skill}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
-            </div>
+            </Card>
           </div>
 
           {/* Floating Chatbot */}
           <VoiceChatbot />
 
           {/* Main Form */}
-          <div className="lg:col-span-8">
+          <div className="lg:col-span-6">
             <Card className="p-8 bg-gradient-card border-border shadow-card">
               <div className="space-y-6">
                 {/* Use Case Selector */}
@@ -311,36 +365,36 @@ export const HeroSection = () => {
                       placeholder="+1234567890"
                       className="bg-background/50 border-border text-foreground placeholder:text-muted-foreground"
                     />
-                </div>
+                  </div>
 
-                {/* Job Description */}
-                <div className="space-y-2 md:col-span-2">
-                  <Label
-                    htmlFor="job-description"
-                    className="text-foreground font-medium"
-                  >
-                    Job Description
-                  </Label>
-                  <Textarea
-                    id="job-description"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    placeholder="Enter job description"
-                    className="bg-background/50 border-border text-foreground placeholder:text-muted-foreground"
-                  />
-                </div>
+                  {/* Job Description */}
+                  <div className="space-y-2 md:col-span-2">
+                    <Label
+                      htmlFor="job-description"
+                      className="text-foreground font-medium"
+                    >
+                      Job Description
+                    </Label>
+                    <Textarea
+                      id="job-description"
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      placeholder="Enter job description"
+                      className="bg-background/50 border-border text-foreground placeholder:text-muted-foreground"
+                    />
+                  </div>
 
-                {/* Full-width button */}
-                <div className="md:col-span-2">
-                  <Button
-                    onClick={handleStartInteraction}
-                    disabled={loading}
-                    className="w-full bg-gradient-primary hover:shadow-glow transition-all duration-300 text-lg py-6 font-semibold"
-                  >
-                    {loading ? "Starting Call..." : "Start AI Interaction"}
-                  </Button>
+                  {/* Full-width button */}
+                  <div className="md:col-span-2">
+                    <Button
+                      onClick={handleStartInteraction}
+                      disabled={loading}
+                      className="w-full bg-gradient-primary hover:shadow-glow transition-all duration-300 text-lg py-6 font-semibold"
+                    >
+                      {loading ? "Starting Call..." : "Start AI Interaction"}
+                    </Button>
+                  </div>
                 </div>
-              </div>
               </div>
 
               {/* Backend Response */}
@@ -356,44 +410,57 @@ export const HeroSection = () => {
           </div>
 
           {/* Human Persona */}
-          <div className="lg:col-span-2 flex flex-col items-center space-y-4">
-            <div className="text-center">
+          <div className="lg:col-span-3">
+            <Card className="p-6 text-center shadow-card">
               <h3 className="text-lg font-semibold text-foreground mb-4">
-                Human User
+                Normal User
               </h3>
-              <h3 className="text-lg font-semibold text-foreground mb-4">
-                Human User
-              </h3>
-              <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-primary shadow-glow mb-4">
+              <div className="w-32 h-32 mx-auto rounded-full overflow-hidden border-4 border-primary shadow-glow flex items-center justify-center">
                 <img
                   src={currentUseCase.humanAvatar}
                   alt={`${currentUseCase.human.name} avatar`}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover object-center"
                 />
               </div>
-              <div className="space-y-3 text-sm">
+
+              {/* Name + Age */}
+              <div className="mt-4 space-y-2">
                 <h4 className="font-semibold text-foreground text-base">
                   {currentUseCase.human.name}
                 </h4>
-                <h4 className="font-semibold text-foreground text-base">
-                  {currentUseCase.human.name}
-                </h4>
-                <p className="text-muted-foreground">Age: {currentUseCase.human.age}</p>
-                <div className="space-y-2">
-                  <p className="font-medium text-foreground text-sm">Primary Skills:</p>
-                  <div className="space-y-1">
+                <p className="text-muted-foreground">{currentUseCase.human.age}/{currentUseCase.human.gender}</p>
+              </div>
+
+              {/* CV Style Info */}
+              <div className="mt-6 space-y-4 text-left">
+                {/* Expertise Row */}
+                <div>
+                  <p className="font-bold text-sm text-muted-foreground mb-1">
+                    Expertise
+                  </p>
+                  <p className="text-sm font-semibold text-foreground">
+                    {currentUseCase.human.expertise}
+                  </p>
+                </div>
+
+                {/* Skills Row */}
+                <div>
+                  <p className="font-bold text-sm text-muted-foreground mb-1">
+                    Primary Skills
+                  </p>
+                  <ul className="space-y-1 pl-4">
                     {currentUseCase.human.skills.map((skill, index) => (
-                      <div
+                      <li
                         key={index}
-                        className="bg-gradient-secondary/10 rounded-md px-2 py-1 border border-secondary/20"
+                        className="text-sm text-foreground list-disc"
                       >
-                        <p className="text-xs font-medium text-foreground">🎯 {skill}</p>
-                      </div>
+                        {skill}
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 </div>
               </div>
-            </div>
+            </Card>
           </div>
         </div>
       </div>

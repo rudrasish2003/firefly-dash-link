@@ -47,7 +47,7 @@ export const FeaturesSection = () => {
       <div className="container mx-auto max-w-6xl">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6 text-foreground">
-            Why Choose Our <span className="gradient-text">Axel Tech?</span>
+            Why Choose Our <span className="gradient-text">VYOM Ai?</span>
           </h2>
         </div>
 
