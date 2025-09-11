@@ -23,8 +23,6 @@ import claimsAiAvatar from "@/assets/claims-ai-avatar.png";
 import claimsHumanAvatar from "@/assets/claims-human-avatar.png";
 import bankAiAvatar from "@/assets/bank-ai-avatar.png";
 import bankHumanAvatar from "@/assets/bank-human-avatar.png";
-import realEstateAiAvatar from "@/assets/real-estate-ai-avatar.png";
-import realEstateHumanAvatar from "@/assets/real-estate-human-avatar.png";
 
 // ================== Use Cases ==================
 const useCases = {
@@ -94,8 +92,8 @@ const useCases = {
   },
   "real-estate": {
   name: "Real Estate Enquiry",
-  aiAvatar: realEstateAiAvatar,
-  humanAvatar: realEstateHumanAvatar,
+  aiAvatar: "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRyOfNxyO1J_vEJOu7qAv2LiQRdF-rXaaUHYqrvidjnuQIyZxWA",
+  humanAvatar: "https://t3.ftcdn.net/jpg/13/41/89/02/360_F_1341890295_Ed4pQXKuJmzZOLMk5EDCb5jjsuCEewCQ.jpg",
   robot: {
     name: "RealtorBot",
     age: "AI Assistant",
@@ -127,7 +125,7 @@ export const HeroSection = () => {
   // ================== Handle Call API ==================
   const handleStartInteraction = async () => {
     if (!candidateName || !candidateNumber) {
-      alert("Please fill in candidate name and number.");
+      alert("Please fill in company name, candidate name and number.");
       return;
     }
 
