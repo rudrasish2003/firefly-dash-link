@@ -67,7 +67,8 @@ const VoiceChatbot = () => {
     setIsExpanded(!isExpanded);
   };
 
-  const sendTextMessage = () => {
+  // ✅ Integrated with backend /chat API
+  const sendTextMessage = async () => {
     if (currentMessage.trim()) {
       const userMessage = {
         id: Date.now().toString(),
@@ -77,18 +78,34 @@ const VoiceChatbot = () => {
       };
       
       setMessages(prev => [...prev, userMessage]);
+      const messageToSend = currentMessage;
       setCurrentMessage('');
       
-      // Simulate bot response (replace with actual AI integration)
-      setTimeout(() => {
+      try {
+        const res = await fetch("http://localhost:3002/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: messageToSend }),
+        });
+        const data = await res.json();
+
         const botMessage = {
           id: (Date.now() + 1).toString(),
-          text: "Thanks for your message! This is a simulated response. Integration with actual AI service needed.",
+          text: data.assistant || "Sorry, I couldn’t generate a response.",
           sender: 'bot' as const,
           timestamp: new Date()
         };
         setMessages(prev => [...prev, botMessage]);
-      }, 1000);
+      } catch (err) {
+        console.error("Chat error:", err);
+        const errorMessage = {
+          id: (Date.now() + 1).toString(),
+          text: "⚠️ Error connecting to server. Please try again.",
+          sender: 'bot' as const,
+          timestamp: new Date()
+        };
+        setMessages(prev => [...prev, errorMessage]);
+      }
     }
   };
 
