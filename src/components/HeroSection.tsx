@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -92,9 +93,9 @@ const useCases = {
     },
   },
   "real-estate": {
-    name: "Real Estate Agent",
-    aiAvatar: realEstateAiAvatar,
-    humanAvatar: realEstateHumanAvatar,
+    name: "Real Estate Enquiry",
+    aiAvatar: "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRyOfNxyO1J_vEJOu7qAv2LiQRdF-rXaaUHYqrvidjnuQIyZxWA",
+    humanAvatar: "https://t3.ftcdn.net/jpg/13/41/89/02/360_F_1341890295_Ed4pQXKuJmzZOLMk5EDCb5jjsuCEewCQ.jpg",
     robot: {
       name: "RealtorBot",
       age: "AI Assistant",
@@ -107,13 +108,17 @@ const useCases = {
       skills: ["Local Market Knowledge", "Negotiation", "Customer Care"],
     },
   },
+
 };
 
 export const HeroSection = () => {
-  const [selectedUseCase, setSelectedUseCase] = useState<string>("hr-recruitment");
+  const [selectedUseCase, setSelectedUseCase] = useState<string>(
+    "hr-recruitment"
+  );
   const [candidateName, setCandidateName] = useState("");
-  const [companyName, setCompanyName] = useState("");
+  const [CompanyName, setCompanyName] = useState("");
   const [candidateNumber, setCandidateNumber] = useState("");
+  const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState<any>(null);
 
@@ -121,7 +126,7 @@ export const HeroSection = () => {
 
   // ================== Handle Call API ==================
   const handleStartInteraction = async () => {
-    if (!candidateName || !candidateNumber || !companyName) {
+    if (!candidateName || !candidateNumber) {
       alert("Please fill in company name, candidate name and number.");
       return;
     }
@@ -131,7 +136,7 @@ export const HeroSection = () => {
       const res = await axios.post("http://localhost:3002/api/call", {
         candidateName,
         phoneNumber: candidateNumber,
-        companyName,
+        jobDescription: description,
         useCase: currentUseCase.name,
       });
 
@@ -157,6 +162,8 @@ export const HeroSection = () => {
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             Intelligent AI solutions for seamless automation and enhanced user
             experiences across industries.
+            Intelligent AI solutions for seamless automation and enhanced user
+            experiences across industries.
           </p>
         </div>
 
@@ -164,6 +171,9 @@ export const HeroSection = () => {
           {/* AI Persona */}
           <div className="lg:col-span-2 flex flex-col items-center space-y-4">
             <div className="text-center">
+              <h3 className="text-lg font-semibold text-foreground mb-4">
+                AI Agent
+              </h3>
               <h3 className="text-lg font-semibold text-foreground mb-4">
                 AI Agent
               </h3>
@@ -178,10 +188,15 @@ export const HeroSection = () => {
                 <h4 className="font-semibold text-foreground text-base">
                   {currentUseCase.robot.name}
                 </h4>
-                <p className="text-muted-foreground">{currentUseCase.robot.age}</p>
+                <p className="text-muted-foreground">
+                  {currentUseCase.robot.age}
+                </p>
                 <div className="space-y-2">
                   <p className="font-medium text-primary text-sm">Expertise:</p>
                   <div className="bg-primary/10 rounded-lg px-3 py-2 border border-primary/20">
+                    <p className="text-xs font-medium text-primary">
+                      {currentUseCase.robot.expertise}
+                    </p>
                     <p className="text-xs font-medium text-primary">
                       {currentUseCase.robot.expertise}
                     </p>
@@ -191,18 +206,21 @@ export const HeroSection = () => {
                   <p className="font-medium text-foreground text-sm">
                     Primary Skills:
                   </p>
-                  <div className="space-y-1">
-                    {currentUseCase.robot.skills.map((skill, index) => (
-                      <div
-                        key={index}
-                        className="bg-gradient-primary/10 rounded-md px-2 py-1 border border-primary/10"
-                      >
-                        <p className="text-xs font-medium text-foreground">
-                          ✨ {skill}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
+                  <p className="font-medium text-foreground text-sm">
+                    Primary Skills:
+                  </p>
+                <div className="space-y-1">
+                  {currentUseCase.robot.skills.map((skill, index) => (
+                    <div
+                      key={index}
+                      className="bg-gradient-primary/10 rounded-md px-2 py-1 border border-primary/10"
+                    >
+                      <p className="text-xs font-medium text-foreground">
+                        ✨ {skill}
+                      </p>
+                    </div>
+                  ))}
+                </div>
                 </div>
               </div>
             </div>
@@ -223,25 +241,38 @@ export const HeroSection = () => {
                       <SelectValue placeholder="Select use case" />
                     </SelectTrigger>
                     <SelectContent className="bg-card border-border z-[100]">
-                      <SelectItem value="hr-recruitment">HR-Recruitment</SelectItem>
-                      <SelectItem value="insurance-sales">Insurance Product Sales</SelectItem>
-                      <SelectItem value="insurance-claims">Insurance Claim Process</SelectItem>
-                      <SelectItem value="bank-support">Bank Customer Care</SelectItem>
-                      <SelectItem value="real-estate">Real Estate Agent</SelectItem>
+                      <SelectItem value="hr-recruitment">
+                        HR-Recruitment
+                      </SelectItem>
+                      <SelectItem value="insurance-sales">
+                        Insurance Product Sales
+                      </SelectItem>
+                      <SelectItem value="insurance-claims">
+                        Insurance Claim Process
+                      </SelectItem>
+                      <SelectItem value="bank-support">
+                        Bank Customer Care
+                      </SelectItem>
+                      <SelectItem value="real-estate">
+                        Real Estate Enquiry
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 {/* Form fields */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Company Name */}
+                  {/* Company Name (full width) */}
                   <div className="space-y-2 md:col-span-2">
-                    <Label htmlFor="company-name" className="text-foreground font-medium">
+                    <Label
+                      htmlFor="company-name"
+                      className="text-foreground font-medium"
+                    >
                       Company Name
                     </Label>
                     <Input
                       id="company-name"
-                      value={companyName}
+                      value={CompanyName}
                       onChange={(e) => setCompanyName(e.target.value)}
                       placeholder="Enter company name"
                       className="bg-background/50 border-border text-foreground placeholder:text-muted-foreground"
@@ -250,7 +281,10 @@ export const HeroSection = () => {
 
                   {/* Candidate Name */}
                   <div className="space-y-2 md:col-span-2">
-                    <Label htmlFor="candidate-name" className="text-foreground font-medium">
+                    <Label
+                      htmlFor="candidate-name"
+                      className="text-foreground font-medium"
+                    >
                       Candidate Name
                     </Label>
                     <Input
@@ -264,7 +298,10 @@ export const HeroSection = () => {
 
                   {/* Candidate Number */}
                   <div className="space-y-2 md:col-span-2">
-                    <Label htmlFor="candidate-number" className="text-foreground font-medium">
+                    <Label
+                      htmlFor="candidate-number"
+                      className="text-foreground font-medium"
+                    >
                       Candidate Number
                     </Label>
                     <Input
@@ -274,34 +311,56 @@ export const HeroSection = () => {
                       placeholder="+1234567890"
                       className="bg-background/50 border-border text-foreground placeholder:text-muted-foreground"
                     />
-                  </div>
-
-                  {/* Submit Button */}
-                  <div className="md:col-span-2">
-                    <Button
-                      onClick={handleStartInteraction}
-                      disabled={loading}
-                      className="w-full bg-gradient-primary hover:shadow-glow transition-all duration-300 text-lg py-6 font-semibold"
-                    >
-                      {loading ? "Starting Call..." : "Start AI Interaction"}
-                    </Button>
-                  </div>
                 </div>
 
-                {/* Backend Response */}
-                {response && (
-                  <div className="mt-6 p-4 bg-background border rounded-lg text-sm">
-                    <p className="font-semibold">Assistant ID: {response.assistantId}</p>
-                    <p className="font-semibold">Call ID: {response.callId}</p>
-                  </div>
-                )}
+                {/* Job Description */}
+                <div className="space-y-2 md:col-span-2">
+                  <Label
+                    htmlFor="job-description"
+                    className="text-foreground font-medium"
+                  >
+                    Job Description
+                  </Label>
+                  <Textarea
+                    id="job-description"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Enter job description"
+                    className="bg-background/50 border-border text-foreground placeholder:text-muted-foreground"
+                  />
+                </div>
+
+                {/* Full-width button */}
+                <div className="md:col-span-2">
+                  <Button
+                    onClick={handleStartInteraction}
+                    disabled={loading}
+                    className="w-full bg-gradient-primary hover:shadow-glow transition-all duration-300 text-lg py-6 font-semibold"
+                  >
+                    {loading ? "Starting Call..." : "Start AI Interaction"}
+                  </Button>
+                </div>
               </div>
+              </div>
+
+              {/* Backend Response */}
+              {response && (
+                <div className="mt-6 p-4 bg-background border rounded-lg text-sm">
+                  <p className="font-semibold">
+                    Assistant ID: {response.assistantId}
+                  </p>
+                  <p className="font-semibold">Call ID: {response.callId}</p>
+                </div>
+              )}
             </Card>
           </div>
 
           {/* Human Persona */}
           <div className="lg:col-span-2 flex flex-col items-center space-y-4">
             <div className="text-center">
+              <h3 className="text-lg font-semibold text-foreground mb-4">
+                Human User
+              </h3>
               <h3 className="text-lg font-semibold text-foreground mb-4">
                 Human User
               </h3>
@@ -313,6 +372,9 @@ export const HeroSection = () => {
                 />
               </div>
               <div className="space-y-3 text-sm">
+                <h4 className="font-semibold text-foreground text-base">
+                  {currentUseCase.human.name}
+                </h4>
                 <h4 className="font-semibold text-foreground text-base">
                   {currentUseCase.human.name}
                 </h4>
@@ -334,7 +396,7 @@ export const HeroSection = () => {
             </div>
           </div>
         </div>
-      </div> 
-    </section>
+      </div>
+    </section >
   );
 };
