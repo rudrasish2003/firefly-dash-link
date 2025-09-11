@@ -26,8 +26,6 @@ const VoiceChatbot: React.FC = () => {
     Array<{ id: string; text: string; sender: "user" | "bot"; timestamp: Date }>
   >([]);
   const [currentMessage, setCurrentMessage] = useState("");
-  const [websiteUrl, setWebsiteUrl] = useState("");
-  const [isLoadingUrl, setIsLoadingUrl] = useState(false);
   const [volume, setVolume] = useState<number[]>([75]);
 
   const vapiRef = useRef<any>(null);
@@ -42,7 +40,7 @@ const VoiceChatbot: React.FC = () => {
   }, [messages]);
 
   useEffect(() => {
-    const vapi = new Vapi("090a9b90-b436-426e-adb9-52728fe938b5"); // replace with your real key
+    const vapi = new Vapi("090a9b90-b436-426e-adb9-52728fe938b5");  
     vapiRef.current = vapi;
 
     vapi.on("call-start", () => setIsConnected(true));
@@ -55,44 +53,6 @@ const VoiceChatbot: React.FC = () => {
       vapi.stop();
     };
   }, []);
-
-  // ================= Dynamic Prompt Loader =================
-  const submitWebsiteUrl = async () => {
-    if (!websiteUrl.trim()) return;
-    setIsLoadingUrl(true);
-    try {
-      const res = await fetch("http://localhost:3002/generatePrompt", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: websiteUrl }),
-      });
-      const data = await res.json();
-
-      if (data?.prompt) {
-        // ✅ Update Vapi session dynamically
-        vapiRef.current?.updateSession({
-          assistant: { instructions: data.prompt },
-        });
-
-        // ✅ Add system message in chat to show context updated
-        setMessages((p) => [
-          ...p,
-          {
-            id: Date.now().toString(),
-            text: "🔄 Assistant updated with latest website context.",
-            sender: "bot",
-            timestamp: new Date(),
-          },
-        ]);
-
-        setIsConnected(true);
-      }
-    } catch (err) {
-      console.error("Website load error:", err);
-    } finally {
-      setIsLoadingUrl(false);
-    }
-  };
 
   // ================= Voice Controls =================
   const toggleListening = () => {
@@ -185,24 +145,6 @@ const VoiceChatbot: React.FC = () => {
                 <X className="h-4 w-4" />
               </Button>
             </div>
-            {/* URL input */}
-            {!isConnected && (
-              <div className="flex gap-2 mt-3">
-                <Input
-                  value={websiteUrl}
-                  onChange={(e) => setWebsiteUrl(e.target.value)}
-                  placeholder="https://example.com"
-                  className="h-8 text-sm flex-1"
-                />
-                <Button
-                  onClick={submitWebsiteUrl}
-                  disabled={isLoadingUrl}
-                  className="h-8 text-sm"
-                >
-                  {isLoadingUrl ? "..." : "Submit"}
-                </Button>
-              </div>
-            )}
 
             {/* Mode toggle + volume */}
             <div className="flex items-center justify-between mt-2">
